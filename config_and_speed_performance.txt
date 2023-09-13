@@ -1,0 +1,660 @@
+(dbnet_wenmu) C:\Application\Develop\DBNet_pytorch_Wenmu>python ./tools/train.py --config_file "config/icdar2015_resnet18_FPN_DBhead_polyLR.yaml"
+load from imagenet
+2023-02-17 15:04:54,695 DBNet.pytorch INFO: {'arch': {'backbone': {'in_channels': 3,
+                       'pretrained': True,
+                       'type': 'resnet18'},
+          'head': {'k': 50, 'out_channels': 2, 'type': 'DBHead'},
+          'neck': {'inner_channels': 256, 'type': 'FPN'},
+          'type': 'Model'},
+ 'dataset': {'train': {'dataset': {'args': {'data_path': ['./datasets/train.txt'],
+                                            'filter_keys': ['img_path',
+                                                            'img_name',
+                                                            'text_polys',
+                                                            'texts',
+                                                            'ignore_tags',
+                                                            'shape'],
+                                            'ignore_tags': ['*', '###'],
+                                            'img_mode': 'RGB',
+                                            'pre_processes': [{'args': [{'args': {'p': 0.5},
+                                                                         'type': 'Fliplr'},
+                                                                        {'args': {'rotate': [-5,
+                                                                                             5]},
+                                                                         'type': 'Affine'},
+                                                                        {'args': {'size': [0.5,
+                                                                                           3]},
+                                                                         'type': 'Resize'}],
+                                                               'type': 'IaaAugment'},
+                                                              {'args': {'keep_ratio': True,
+                                                                        'max_tries': 50,
+                                                                        'size': [640,
+                                                                                 640]},
+                                                               'type': 'EastRandomCropData'},
+                                                              {'args': {'shrink_ratio': 0.4,
+                                                                        'thresh_max': 0.7,
+                                                                        'thresh_min': 0.3},
+                                                               'type': 'MakeBorderMap'},
+                                                              {'args': {'min_text_size': 6,
+                                                                        'shrink_ratio': 0.4},
+                                                               'type': 'MakeShrinkMap'}],
+                                            'transforms': [{'args': {},
+                                                            'type': 'ToTensor'},
+                                                           {'args': {'mean': [0.485,
+                                                                              0.456,
+                                                                              0.406],
+                                                                     'std': [0.229,
+                                                                             0.224,
+                                                                             0.225]},
+                                                            'type': 'Normalize'}]},
+                                   'type': 'ICDAR2015Dataset'},
+                       'loader': {'batch_size': 32,
+                                  'collate_fn': '',
+                                  'num_workers': 8,
+                                  'pin_memory': True,
+                                  'shuffle': True}},
+             'validate': {'dataset': {'args': {'data_path': ['./datasets/test.txt'],
+                                               'filter_keys': [],
+                                               'ignore_tags': ['*', '###'],
+                                               'img_mode': 'RGB',
+                                               'pre_processes': [{'args': {'resize_text_polys': False,
+                                                                           'short_size': 736},
+                                                                  'type': 'ResizeShortSize'}],
+                                               'transforms': [{'args': {},
+                                                               'type': 'ToTensor'},
+                                                              {'args': {'mean': [0.485,
+                                                                                 0.456,
+                                                                                 0.406],
+                                                                        'std': [0.229,
+                                                                                0.224,
+                                                                                0.225]},
+                                                               'type': 'Normalize'}]},
+                                      'type': 'ICDAR2015Dataset'},
+                          'loader': {'batch_size': 8,
+                                     'collate_fn': 'ICDARCollectFN',
+                                     'num_workers': 8,
+                                     'pin_memory': True,
+                                     'shuffle': True}}},
+ 'distributed': False,
+ 'local_rank': 0,
+ 'loss': {'alpha': 1, 'beta': 10, 'ohem_ratio': 3, 'type': 'DBLoss'},
+ 'lr_scheduler': {'args': {'warmup_epoch': 3}, 'type': 'WarmupPolyLR'},
+ 'metric': {'args': {'is_output_polygon': False}, 'type': 'QuadMetric'},
+ 'name': 'DBNet_resnet18_FPN_DBHead',
+ 'optimizer': {'args': {'amsgrad': True, 'lr': 0.001, 'weight_decay': 0},
+               'type': 'Adam'},
+ 'post_processing': {'args': {'box_thresh': 0.7,
+                              'max_candidates': 1000,
+                              'thresh': 0.3,
+                              'unclip_ratio': 1.5},
+                     'type': 'SegDetectorRepresenter'},
+ 'trainer': {'epochs': 200,
+             'finetune_checkpoint': 'C:\\Application\\Develop\\DBNet_pytorch_Wenmu\\output\\DBNet_resnet18_FPN_DBHead\\checkpoint\\model_best.pth',
+             'log_iter': 10,
+             'output_dir': 'C:\\Application\\Develop\\DBNet_pytorch_Wenmu\\output',
+             'resume_checkpoint': '',
+             'seed': 2,
+             'show_images_iter': 500,
+             'tensorboard': False}}
+2023-02-17 15:04:54,711 DBNet.pytorch INFO: train with device cuda and pytorch 1.13.0
+2023-02-17 15:04:54,711 DBNet.pytorch INFO: Loading checkpoint: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best.pth ...
+2023-02-17 15:04:54,836 DBNet.pytorch INFO: finetune from checkpoint C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best.pth
+2023-02-17 15:04:55,023 DBNet.pytorch INFO: train dataset has 1463 samples,46 in dataloader, validate dataset has 252 samples,32 in dataloader
+2023-02-17 15:06:08,914 DBNet.pytorch INFO: [1/200], [10/46], global_step: 10, speed: 4.3 samples/sec, acc: 0.9379, iou_shrink_map: 0.8653, loss: 0.6818, loss_shrink_maps: 0.1656, loss_threshold_maps: 0.0377, loss_binary_maps: 0.1388, , lr:0.000376812, time:73.89
+2023-02-17 15:06:22,821 DBNet.pytorch INFO: [1/200], [20/46], global_step: 20, speed: 23.0 samples/sec, acc: 0.9453, iou_shrink_map: 0.8688, loss: 0.5944, loss_shrink_maps: 0.1340, loss_threshold_maps: 0.0348, loss_binary_maps: 0.1121, , lr:0.000425121, time:13.91
+2023-02-17 15:06:36,430 DBNet.pytorch INFO: [1/200], [30/46], global_step: 30, speed: 23.5 samples/sec, acc: 0.9473, iou_shrink_map: 0.8699, loss: 0.7086, loss_shrink_maps: 0.1580, loss_threshold_maps: 0.0414, loss_binary_maps: 0.1362, , lr:0.00047343, time:13.61
+2023-02-17 15:06:47,664 DBNet.pytorch INFO: [1/200], [40/46], global_step: 40, speed: 28.5 samples/sec, acc: 0.9473, iou_shrink_map: 0.8694, loss: 0.7804, loss_shrink_maps: 0.1816, loss_threshold_maps: 0.0444, loss_binary_maps: 0.1547, , lr:0.000521739, time:11.23
+2023-02-17 15:06:56,338 DBNet.pytorch INFO: [1/200], train_loss: 0.7307, time: 121.3141, lr: 0.0005507246376811594
+C:\Application\Develop\DBNet_pytorch_Wenmu\utils\ocr_metric\icdar2015\quad_metric.py:45: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify 'dtype=object' when creating the ndarray.
+  pred_polygons_batch = np.array(output[0])
+C:\Application\Develop\DBNet_pytorch_Wenmu\utils\ocr_metric\icdar2015\quad_metric.py:46: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify 'dtype=object' when creating the ndarray.
+  pred_scores_batch = np.array(output[1])
+2023-02-17 15:08:57,940 DBNet.pytorch INFO: FPS:5.949830207438178
+2023-02-17 15:08:57,952 DBNet.pytorch INFO: test: recall: 0.692968, precision: 0.712225, f1: 0.702465
+2023-02-17 15:08:57,953 DBNet.pytorch INFO: current best, recall: 0.692968, precision: 0.712225, hmean: 0.702465, train_loss: 0.730715, best_model_epoch: 1.000000,
+2023-02-17 15:08:58,083 DBNet.pytorch INFO: Saving current best: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint/model_best.pth
+2023-02-17 15:09:55,449 DBNet.pytorch INFO: [2/200], [4/46], global_step: 50, speed: 5.6 samples/sec, acc: 0.9424, iou_shrink_map: 0.8606, loss: 0.7925, loss_shrink_maps: 0.1889, loss_threshold_maps: 0.0442, loss_binary_maps: 0.1614, , lr:0.000570048, time:57.37
+2023-02-17 15:10:09,894 DBNet.pytorch INFO: [2/200], [14/46], global_step: 60, speed: 22.2 samples/sec, acc: 0.9473, iou_shrink_map: 0.8646, loss: 0.7821, loss_shrink_maps: 0.1743, loss_threshold_maps: 0.0459, loss_binary_maps: 0.1486, , lr:0.000618357, time:14.45
+2023-02-17 15:10:23,729 DBNet.pytorch INFO: [2/200], [24/46], global_step: 70, speed: 23.1 samples/sec, acc: 0.9475, iou_shrink_map: 0.8648, loss: 0.7771, loss_shrink_maps: 0.1806, loss_threshold_maps: 0.0444, loss_binary_maps: 0.1527, , lr:0.000666667, time:13.83
+2023-02-17 15:10:36,541 DBNet.pytorch INFO: [2/200], [34/46], global_step: 80, speed: 25.0 samples/sec, acc: 0.9474, iou_shrink_map: 0.8654, loss: 0.8147, loss_shrink_maps: 0.1731, loss_threshold_maps: 0.0493, loss_binary_maps: 0.1483, , lr:0.000714976, time:12.81
+2023-02-17 15:10:46,843 DBNet.pytorch INFO: [2/200], [44/46], global_step: 90, speed: 31.1 samples/sec, acc: 0.9482, iou_shrink_map: 0.8670, loss: 0.7564, loss_shrink_maps: 0.1684, loss_threshold_maps: 0.0443, loss_binary_maps: 0.1451, , lr:0.000763285, time:10.30
+2023-02-17 15:10:49,202 DBNet.pytorch INFO: [2/200], train_loss: 0.7594, time: 111.1177, lr: 0.0007729468599033816
+2023-02-17 15:12:45,632 DBNet.pytorch INFO: FPS:7.441063138105729
+2023-02-17 15:12:45,648 DBNet.pytorch INFO: test: recall: 0.738849, precision: 0.689960, f1: 0.713568
+2023-02-17 15:12:45,648 DBNet.pytorch INFO: current best, recall: 0.738849, precision: 0.689960, hmean: 0.713568, train_loss: 0.759350, best_model_epoch: 2.000000,
+2023-02-17 15:12:45,773 DBNet.pytorch INFO: Saving current best: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint/model_best.pth
+2023-02-17 15:13:48,162 DBNet.pytorch INFO: [3/200], [8/46], global_step: 100, speed: 5.1 samples/sec, acc: 0.9444, iou_shrink_map: 0.8641, loss: 0.7220, loss_shrink_maps: 0.1540, loss_threshold_maps: 0.0441, loss_binary_maps: 0.1270, , lr:0.000811594, time:62.39
+2023-02-17 15:14:02,847 DBNet.pytorch INFO: [3/200], [18/46], global_step: 110, speed: 21.8 samples/sec, acc: 0.9442, iou_shrink_map: 0.8599, loss: 0.8453, loss_shrink_maps: 0.2121, loss_threshold_maps: 0.0472, loss_binary_maps: 0.1615, , lr:0.000859903, time:14.69
+2023-02-17 15:14:16,613 DBNet.pytorch INFO: [3/200], [28/46], global_step: 120, speed: 23.2 samples/sec, acc: 0.9405, iou_shrink_map: 0.8552, loss: 0.8406, loss_shrink_maps: 0.2284, loss_threshold_maps: 0.0447, loss_binary_maps: 0.1653, , lr:0.000908213, time:13.77
+2023-02-17 15:14:28,517 DBNet.pytorch INFO: [3/200], [38/46], global_step: 130, speed: 26.9 samples/sec, acc: 0.9414, iou_shrink_map: 0.8538, loss: 0.8166, loss_shrink_maps: 0.1902, loss_threshold_maps: 0.0472, loss_binary_maps: 0.1549, , lr:0.000956522, time:11.90
+2023-02-17 15:14:37,032 DBNet.pytorch INFO: [3/200], train_loss: 0.8254, time: 111.2439, lr: 0.0009951690821256038
+2023-02-17 15:16:38,601 DBNet.pytorch INFO: FPS:7.400248749102541
+2023-02-17 15:16:38,616 DBNet.pytorch INFO: test: recall: 0.658423, precision: 0.707887, f1: 0.682260
+2023-02-17 15:16:38,616 DBNet.pytorch INFO: current best, recall: 0.738849, precision: 0.689960, hmean: 0.713568, train_loss: 0.759350, best_model_epoch: 2.000000,
+2023-02-17 15:16:38,616 DBNet.pytorch INFO: Saving checkpoint: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint/model_latest.pth
+2023-02-17 15:17:35,954 DBNet.pytorch INFO: [4/200], [2/46], global_step: 140, speed: 5.6 samples/sec, acc: 0.9366, iou_shrink_map: 0.8533, loss: 0.8125, loss_shrink_maps: 0.1866, loss_threshold_maps: 0.0465, loss_binary_maps: 0.1613, , lr:0.000999901, time:57.34
+***************************************************************************************
+(dbnet_wenmu) C:\Application\Develop\DBNet_pytorch_Wenmu>python ./tools/train.py --config_file "config/icdar2015_resnet18_FPN_DBhead_polyLR.yaml"
+load from imagenet
+2023-02-17 14:38:19,486 DBNet.pytorch INFO: {'arch': {'backbone': {'in_channels': 3,
+                       'pretrained': True,
+                       'type': 'resnet18'},
+          'head': {'k': 50, 'out_channels': 2, 'type': 'DBHead'},
+          'neck': {'inner_channels': 256, 'type': 'FPN'},
+          'type': 'Model'},
+ 'dataset': {'train': {'dataset': {'args': {'data_path': ['./datasets/train.txt'],
+                                            'filter_keys': ['img_path',
+                                                            'img_name',
+                                                            'text_polys',
+                                                            'texts',
+                                                            'ignore_tags',
+                                                            'shape'],
+                                            'ignore_tags': ['*', '###'],
+                                            'img_mode': 'RGB',
+                                            'pre_processes': [{'args': [{'args': {'p': 0.5},
+                                                                         'type': 'Fliplr'},
+                                                                        {'args': {'rotate': [-5,
+                                                                                             5]},
+                                                                         'type': 'Affine'},
+                                                                        {'args': {'size': [0.5,
+                                                                                           3]},
+                                                                         'type': 'Resize'}],
+                                                               'type': 'IaaAugment'},
+                                                              {'args': {'keep_ratio': True,
+                                                                        'max_tries': 50,
+                                                                        'size': [640,
+                                                                                 640]},
+                                                               'type': 'EastRandomCropData'},
+                                                              {'args': {'shrink_ratio': 0.4,
+                                                                        'thresh_max': 0.7,
+                                                                        'thresh_min': 0.3},
+                                                               'type': 'MakeBorderMap'},
+                                                              {'args': {'min_text_size': 6,
+                                                                        'shrink_ratio': 0.4},
+                                                               'type': 'MakeShrinkMap'}],
+                                            'transforms': [{'args': {},
+                                                            'type': 'ToTensor'},
+                                                           {'args': {'mean': [0.485,
+                                                                              0.456,
+                                                                              0.406],
+                                                                     'std': [0.229,
+                                                                             0.224,
+                                                                             0.225]},
+                                                            'type': 'Normalize'}]},
+                                   'type': 'ICDAR2015Dataset'},
+                       'loader': {'batch_size': 32,
+                                  'collate_fn': '',
+                                  'num_workers': 16,
+                                  'pin_memory': True,
+                                  'shuffle': True}},
+             'validate': {'dataset': {'args': {'data_path': ['./datasets/test.txt'],
+                                               'filter_keys': [],
+                                               'ignore_tags': ['*', '###'],
+                                               'img_mode': 'RGB',
+                                               'pre_processes': [{'args': {'resize_text_polys': False,
+                                                                           'short_size': 736},
+                                                                  'type': 'ResizeShortSize'}],
+                                               'transforms': [{'args': {},
+                                                               'type': 'ToTensor'},
+                                                              {'args': {'mean': [0.485,
+                                                                                 0.456,
+                                                                                 0.406],
+                                                                        'std': [0.229,
+                                                                                0.224,
+                                                                                0.225]},
+                                                               'type': 'Normalize'}]},
+                                      'type': 'ICDAR2015Dataset'},
+                          'loader': {'batch_size': 8,
+                                     'collate_fn': 'ICDARCollectFN',
+                                     'num_workers': 4,
+                                     'pin_memory': True,
+                                     'shuffle': True}}},
+ 'distributed': False,
+ 'local_rank': 0,
+ 'loss': {'alpha': 1, 'beta': 10, 'ohem_ratio': 3, 'type': 'DBLoss'},
+ 'lr_scheduler': {'args': {'warmup_epoch': 3}, 'type': 'WarmupPolyLR'},
+ 'metric': {'args': {'is_output_polygon': False}, 'type': 'QuadMetric'},
+ 'name': 'DBNet_resnet18_FPN_DBHead',
+ 'optimizer': {'args': {'amsgrad': True, 'lr': 0.0001, 'weight_decay': 0},
+               'type': 'Adam'},
+ 'post_processing': {'args': {'box_thresh': 0.7,
+                              'max_candidates': 1000,
+                              'thresh': 0.3,
+                              'unclip_ratio': 1.5},
+                     'type': 'SegDetectorRepresenter'},
+ 'trainer': {'epochs': 200,
+             'finetune_checkpoint': 'C:\\Application\\Develop\\DBNet_pytorch_Wenmu\\output\\DBNet_resnet18_FPN_DBHead\\checkpoint\\model_best.pth',
+             'log_iter': 10,
+             'output_dir': 'C:\\Application\\Develop\\DBNet_pytorch_Wenmu\\output',
+             'resume_checkpoint': '',
+             'seed': 2,
+             'show_images_iter': 500,
+             'tensorboard': False}}
+2023-02-17 14:38:19,501 DBNet.pytorch INFO: train with device cuda and pytorch 1.13.0
+2023-02-17 14:38:19,501 DBNet.pytorch INFO: Loading checkpoint: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best.pth ...
+2023-02-17 14:38:19,673 DBNet.pytorch INFO: finetune from checkpoint C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best.pth
+2023-02-17 14:38:19,861 DBNet.pytorch INFO: train dataset has 1463 samples,46 in dataloader, validate dataset has 252 samples,32 in dataloader
+2023-02-17 14:40:30,758 DBNet.pytorch INFO: [1/200], [10/46], global_step: 10, speed: 2.4 samples/sec, acc: 0.9489, iou_shrink_map: 0.8732, loss: 0.6361, loss_shrink_maps: 0.1430, loss_threshold_maps: 0.0374, loss_binary_maps: 0.1195, , lr:3.76812e-05, time:130.90
+2023-02-17 14:40:42,889 DBNet.pytorch INFO: [1/200], [20/46], global_step: 20, speed: 26.4 samples/sec, acc: 0.9510, iou_shrink_map: 0.8752, loss: 0.5539, loss_shrink_maps: 0.1216, loss_threshold_maps: 0.0332, loss_binary_maps: 0.1005, , lr:4.25121e-05, time:12.13
+2023-02-17 14:40:53,123 DBNet.pytorch INFO: [1/200], [30/46], global_step: 30, speed: 31.3 samples/sec, acc: 0.9529, iou_shrink_map: 0.8789, loss: 0.6320, loss_shrink_maps: 0.1372, loss_threshold_maps: 0.0382, loss_binary_maps: 0.1129, , lr:4.7343e-05, time:10.23
+2023-02-17 14:41:03,358 DBNet.pytorch INFO: [1/200], [40/46], global_step: 40, speed: 31.3 samples/sec, acc: 0.9524, iou_shrink_map: 0.8765, loss: 0.7229, loss_shrink_maps: 0.1787, loss_threshold_maps: 0.0402, loss_binary_maps: 0.1420, , lr:5.21739e-05, time:10.23
+2023-02-17 14:41:12,270 DBNet.pytorch INFO: [1/200], train_loss: 0.6904, time: 172.4090, lr: 5.507246376811594e-05
+C:\Application\Develop\DBNet_pytorch_Wenmu\utils\ocr_metric\icdar2015\quad_metric.py:45: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify 'dtype=object' when creating the ndarray.
+  pred_polygons_batch = np.array(output[0])
+C:\Application\Develop\DBNet_pytorch_Wenmu\utils\ocr_metric\icdar2015\quad_metric.py:46: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify 'dtype=object' when creating the ndarray.
+  pred_scores_batch = np.array(output[1])
+2023-02-17 14:42:54,552 DBNet.pytorch INFO: FPS:5.866985826580602
+2023-02-17 14:42:54,560 DBNet.pytorch INFO: test: recall: 0.763139, precision: 0.746615, f1: 0.754787
+2023-02-17 14:42:54,560 DBNet.pytorch INFO: current best, recall: 0.763139, precision: 0.746615, hmean: 0.754787, train_loss: 0.690394, best_model_epoch: 1.000000,
+2023-02-17 14:42:54,685 DBNet.pytorch INFO: Saving current best: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint/model_best.pth
+2023-02-17 14:44:42,423 DBNet.pytorch INFO: [2/200], [4/46], global_step: 50, speed: 3.0 samples/sec, acc: 0.9542, iou_shrink_map: 0.8807, loss: 0.6702, loss_shrink_maps: 0.1596, loss_threshold_maps: 0.0378, loss_binary_maps: 0.1325, , lr:5.70048e-05, time:107.74
+2023-02-17 14:44:58,485 DBNet.pytorch INFO: [2/200], [14/46], global_step: 60, speed: 20.0 samples/sec, acc: 0.9539, iou_shrink_map: 0.8814, loss: 0.6121, loss_shrink_maps: 0.1274, loss_threshold_maps: 0.0375, loss_binary_maps: 0.1095, , lr:6.18357e-05, time:16.01
+2023-02-17 14:45:09,701 DBNet.pytorch INFO: [2/200], [24/46], global_step: 70, speed: 28.5 samples/sec, acc: 0.9543, iou_shrink_map: 0.8819, loss: 0.5961, loss_shrink_maps: 0.1299, loss_threshold_maps: 0.0358, loss_binary_maps: 0.1086, , lr:6.66667e-05, time:11.22
+2023-02-17 14:45:20,023 DBNet.pytorch INFO: [2/200], [34/46], global_step: 80, speed: 31.0 samples/sec, acc: 0.9554, iou_shrink_map: 0.8822, loss: 0.6536, loss_shrink_maps: 0.1510, loss_threshold_maps: 0.0376, loss_binary_maps: 0.1265, , lr:7.14976e-05, time:10.32
+2023-02-17 14:45:30,345 DBNet.pytorch INFO: [2/200], [44/46], global_step: 90, speed: 31.0 samples/sec, acc: 0.9552, iou_shrink_map: 0.8831, loss: 0.6526, loss_shrink_maps: 0.1435, loss_threshold_maps: 0.0386, loss_binary_maps: 0.1233, , lr:7.63285e-05, time:10.32
+2023-02-17 14:45:32,932 DBNet.pytorch INFO: [2/200], train_loss: 0.6631, time: 158.2472, lr: 7.729468599033817e-05
+2023-02-17 14:47:07,363 DBNet.pytorch INFO: FPS:7.3771271152482845
+2023-02-17 14:47:07,378 DBNet.pytorch INFO: test: recall: 0.763335, precision: 0.734362, f1: 0.748568
+2023-02-17 14:47:07,378 DBNet.pytorch INFO: current best, recall: 0.763139, precision: 0.746615, hmean: 0.754787, train_loss: 0.690394, best_model_epoch: 1.000000,
+2023-02-17 14:47:07,378 DBNet.pytorch INFO: Saving checkpoint: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint/model_latest.pth
+2023-02-17 14:48:59,608 DBNet.pytorch INFO: [3/200], [8/46], global_step: 100, speed: 2.9 samples/sec, acc: 0.9529, iou_shrink_map: 0.8787, loss: 0.4759, loss_shrink_maps: 0.0999, loss_threshold_maps: 0.0295, loss_binary_maps: 0.0815, , lr:8.11594e-05, time:112.23
+2023-02-17 14:49:14,092 DBNet.pytorch INFO: [3/200], [18/46], global_step: 110, speed: 22.1 samples/sec, acc: 0.9549, iou_shrink_map: 0.8815, loss: 0.7384, loss_shrink_maps: 0.1620, loss_threshold_maps: 0.0439, loss_binary_maps: 0.1377, , lr:8.59903e-05, time:14.48
+2023-02-17 14:49:24,405 DBNet.pytorch INFO: [3/200], [28/46], global_step: 120, speed: 31.0 samples/sec, acc: 0.9542, iou_shrink_map: 0.8804, loss: 0.6531, loss_shrink_maps: 0.1434, loss_threshold_maps: 0.0389, loss_binary_maps: 0.1207, , lr:9.08213e-05, time:10.31
+2023-02-17 14:49:34,659 DBNet.pytorch INFO: [3/200], [38/46], global_step: 130, speed: 31.2 samples/sec, acc: 0.9540, iou_shrink_map: 0.8801, loss: 0.7396, loss_shrink_maps: 0.1670, loss_threshold_maps: 0.0432, loss_binary_maps: 0.1408, , lr:9.56522e-05, time:10.25
+2023-02-17 14:49:43,409 DBNet.pytorch INFO: [3/200], train_loss: 0.6717, time: 156.0304, lr: 9.951690821256039e-05
+2023-02-17 14:51:16,740 DBNet.pytorch INFO: FPS:7.312577638202417
+2023-02-17 14:51:16,756 DBNet.pytorch INFO: test: recall: 0.756710, precision: 0.725762, f1: 0.740913
+2023-02-17 14:51:16,756 DBNet.pytorch INFO: current best, recall: 0.763139, precision: 0.746615, hmean: 0.754787, train_loss: 0.690394, best_model_epoch: 1.000000,
+2023-02-17 14:51:16,756 DBNet.pytorch INFO: Saving checkpoint: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint/model_latest.pth
+2023-02-17 14:53:03,342 DBNet.pytorch INFO: [4/200], [2/46], global_step: 140, speed: 3.0 samples/sec, acc: 0.9544, iou_shrink_map: 0.8752, loss: 0.7556, loss_shrink_maps: 0.1732, loss_threshold_maps: 0.0440, loss_binary_maps: 0.1426, , lr:9.99901e-05, time:106.59
+2023-02-17 14:53:19,025 DBNet.pytorch INFO: [4/200], [12/46], global_step: 150, speed: 20.5 samples/sec, acc: 0.9552, iou_shrink_map: 0.8808, loss: 0.6204, loss_shrink_maps: 0.1417, loss_threshold_maps: 0.0357, loss_binary_maps: 0.1215, , lr:9.98907e-05, time:15.64
+2023-02-17 14:53:30,802 DBNet.pytorch INFO: [4/200], [22/46], global_step: 160, speed: 27.2 samples/sec, acc: 0.9534, iou_shrink_map: 0.8800, loss: 0.7126, loss_shrink_maps: 0.1600, loss_threshold_maps: 0.0418, loss_binary_maps: 0.1342, , lr:9.97914e-05, time:11.78
+2023-02-17 14:53:41,099 DBNet.pytorch INFO: [4/200], [32/46], global_step: 170, speed: 31.1 samples/sec, acc: 0.9543, iou_shrink_map: 0.8813, loss: 0.7438, loss_shrink_maps: 0.1744, loss_threshold_maps: 0.0426, loss_binary_maps: 0.1438, , lr:9.96921e-05, time:10.30
+2023-02-17 14:53:51,427 DBNet.pytorch INFO: [4/200], [42/46], global_step: 180, speed: 31.0 samples/sec, acc: 0.9535, iou_shrink_map: 0.8795, loss: 0.5838, loss_shrink_maps: 0.1237, loss_threshold_maps: 0.0354, loss_binary_maps: 0.1061, , lr:9.95927e-05, time:10.33
+2023-02-17 14:53:56,114 DBNet.pytorch INFO: [4/200], train_loss: 0.6747, time: 159.3588, lr: 9.955296762210923e-05
+*****************************************************************************
+(dbnet_wenmu) C:\Application\Develop\DBNet_pytorch_Wenmu>python ./tools/train.py --config_file "config/icdar2015_resnet18_FPN_DBhead_polyLR.yaml"
+load from imagenet
+2023-02-17 14:20:45,207 DBNet.pytorch INFO: {'arch': {'backbone': {'in_channels': 3,
+                       'pretrained': True,
+                       'type': 'resnet18'},
+          'head': {'k': 50, 'out_channels': 2, 'type': 'DBHead'},
+          'neck': {'inner_channels': 256, 'type': 'FPN'},
+          'type': 'Model'},
+ 'dataset': {'train': {'dataset': {'args': {'data_path': ['./datasets/train.txt'],
+                                            'filter_keys': ['img_path',
+                                                            'img_name',
+                                                            'text_polys',
+                                                            'texts',
+                                                            'ignore_tags',
+                                                            'shape'],
+                                            'ignore_tags': ['*', '###'],
+                                            'img_mode': 'RGB',
+                                            'pre_processes': [{'args': [{'args': {'p': 0.5},
+                                                                         'type': 'Fliplr'},
+                                                                        {'args': {'rotate': [-5,
+                                                                                             5]},
+                                                                         'type': 'Affine'},
+                                                                        {'args': {'size': [0.5,
+                                                                                           3]},
+                                                                         'type': 'Resize'}],
+                                                               'type': 'IaaAugment'},
+                                                              {'args': {'keep_ratio': True,
+                                                                        'max_tries': 50,
+                                                                        'size': [640,
+                                                                                 640]},
+                                                               'type': 'EastRandomCropData'},
+                                                              {'args': {'shrink_ratio': 0.4,
+                                                                        'thresh_max': 0.7,
+                                                                        'thresh_min': 0.3},
+                                                               'type': 'MakeBorderMap'},
+                                                              {'args': {'min_text_size': 6,
+                                                                        'shrink_ratio': 0.4},
+                                                               'type': 'MakeShrinkMap'}],
+                                            'transforms': [{'args': {},
+                                                            'type': 'ToTensor'},
+                                                           {'args': {'mean': [0.485,
+                                                                              0.456,
+                                                                              0.406],
+                                                                     'std': [0.229,
+                                                                             0.224,
+                                                                             0.225]},
+                                                            'type': 'Normalize'}]},
+                                   'type': 'ICDAR2015Dataset'},
+                       'loader': {'batch_size': 32,
+                                  'collate_fn': '',
+                                  'num_workers': 8,
+                                  'pin_memory': True,
+                                  'shuffle': True}},
+             'validate': {'dataset': {'args': {'data_path': ['./datasets/test.txt'],
+                                               'filter_keys': [],
+                                               'ignore_tags': ['*', '###'],
+                                               'img_mode': 'RGB',
+                                               'pre_processes': [{'args': {'resize_text_polys': False,
+                                                                           'short_size': 736},
+                                                                  'type': 'ResizeShortSize'}],
+                                               'transforms': [{'args': {},
+                                                               'type': 'ToTensor'},
+                                                              {'args': {'mean': [0.485,
+                                                                                 0.456,
+                                                                                 0.406],
+                                                                        'std': [0.229,
+                                                                                0.224,
+                                                                                0.225]},
+                                                               'type': 'Normalize'}]},
+                                      'type': 'ICDAR2015Dataset'},
+                          'loader': {'batch_size': 8,
+                                     'collate_fn': 'ICDARCollectFN',
+                                     'num_workers': 4,
+                                     'pin_memory': True,
+                                     'shuffle': True}}},
+ 'distributed': False,
+ 'local_rank': 0,
+ 'loss': {'alpha': 1, 'beta': 10, 'ohem_ratio': 3, 'type': 'DBLoss'},
+ 'lr_scheduler': {'args': {'warmup_epoch': 3}, 'type': 'WarmupPolyLR'},
+ 'metric': {'args': {'is_output_polygon': False}, 'type': 'QuadMetric'},
+ 'name': 'DBNet_resnet18_FPN_DBHead',
+ 'optimizer': {'args': {'amsgrad': True, 'lr': 0.0001, 'weight_decay': 0},
+               'type': 'Adam'},
+ 'post_processing': {'args': {'box_thresh': 0.7,
+                              'max_candidates': 1000,
+                              'thresh': 0.3,
+                              'unclip_ratio': 1.5},
+                     'type': 'SegDetectorRepresenter'},
+ 'trainer': {'epochs': 200,
+             'finetune_checkpoint': 'C:\\Application\\Develop\\DBNet_pytorch_Wenmu\\output\\DBNet_resnet18_FPN_DBHead\\checkpoint\\model_best.pth',
+             'log_iter': 10,
+             'output_dir': 'C:\\Application\\Develop\\DBNet_pytorch_Wenmu\\output',
+             'resume_checkpoint': '',
+             'seed': 2,
+             'show_images_iter': 500,
+             'tensorboard': False}}
+2023-02-17 14:20:45,223 DBNet.pytorch INFO: train with device cuda and pytorch 1.13.0
+2023-02-17 14:20:45,223 DBNet.pytorch INFO: Loading checkpoint: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best.pth ...
+2023-02-17 14:20:45,410 DBNet.pytorch INFO: finetune from checkpoint C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best.pth
+2023-02-17 14:20:45,629 DBNet.pytorch INFO: train dataset has 1463 samples,46 in dataloader, validate dataset has 252 samples,32 in dataloader
+2023-02-17 14:22:05,015 DBNet.pytorch INFO: [1/200], [10/46], global_step: 10, speed: 4.0 samples/sec, acc: 0.9553, iou_shrink_map: 0.8820, loss: 0.5444, loss_shrink_maps: 0.1180, loss_threshold_maps: 0.0326, loss_binary_maps: 0.1003, , lr:3.76812e-05, time:79.39
+2023-02-17 14:22:19,078 DBNet.pytorch INFO: [1/200], [20/46], global_step: 20, speed: 22.8 samples/sec, acc: 0.9545, iou_shrink_map: 0.8799, loss: 0.5995, loss_shrink_maps: 0.1361, loss_threshold_maps: 0.0349, loss_binary_maps: 0.1140, , lr:4.25121e-05, time:14.06
+2023-02-17 14:22:32,995 DBNet.pytorch INFO: [1/200], [30/46], global_step: 30, speed: 23.0 samples/sec, acc: 0.9553, iou_shrink_map: 0.8820, loss: 0.6074, loss_shrink_maps: 0.1402, loss_threshold_maps: 0.0351, loss_binary_maps: 0.1162, , lr:4.7343e-05, time:13.92
+2023-02-17 14:22:44,296 DBNet.pytorch INFO: [1/200], [40/46], global_step: 40, speed: 28.3 samples/sec, acc: 0.9553, iou_shrink_map: 0.8814, loss: 0.6363, loss_shrink_maps: 0.1490, loss_threshold_maps: 0.0364, loss_binary_maps: 0.1238, , lr:5.21739e-05, time:11.30
+2023-02-17 14:22:52,945 DBNet.pytorch INFO: [1/200], train_loss: 0.6585, time: 127.3161, lr: 5.507246376811594e-05
+C:\Application\Develop\DBNet_pytorch_Wenmu\utils\ocr_metric\icdar2015\quad_metric.py:45: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify 'dtype=object' when creating the ndarray.
+  pred_polygons_batch = np.array(output[0])
+C:\Application\Develop\DBNet_pytorch_Wenmu\utils\ocr_metric\icdar2015\quad_metric.py:46: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify 'dtype=object' when creating the ndarray.
+  pred_scores_batch = np.array(output[1])
+2023-02-17 14:24:34,312 DBNet.pytorch INFO: FPS:5.901346110296446
+2023-02-17 14:24:34,328 DBNet.pytorch INFO: test: recall: 0.760243, precision: 0.731872, f1: 0.745788
+2023-02-17 14:24:34,328 DBNet.pytorch INFO: current best, recall: 0.760243, precision: 0.731872, hmean: 0.745788, train_loss: 0.658483, best_model_epoch: 1.000000,
+2023-02-17 14:24:34,451 DBNet.pytorch INFO: Saving current best: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint/model_best.pth
+2023-02-17 14:25:30,853 DBNet.pytorch INFO: [2/200], [4/46], global_step: 50, speed: 5.7 samples/sec, acc: 0.9497, iou_shrink_map: 0.8685, loss: 0.7160, loss_shrink_maps: 0.1660, loss_threshold_maps: 0.0408, loss_binary_maps: 0.1421, , lr:5.70048e-05, time:56.40
+2023-02-17 14:25:46,186 DBNet.pytorch INFO: [2/200], [14/46], global_step: 60, speed: 20.9 samples/sec, acc: 0.9512, iou_shrink_map: 0.8758, loss: 0.6411, loss_shrink_maps: 0.1424, loss_threshold_maps: 0.0380, loss_binary_maps: 0.1192, , lr:6.18357e-05, time:15.33
+2023-02-17 14:26:00,501 DBNet.pytorch INFO: [2/200], [24/46], global_step: 70, speed: 22.4 samples/sec, acc: 0.9536, iou_shrink_map: 0.8789, loss: 0.6779, loss_shrink_maps: 0.1508, loss_threshold_maps: 0.0398, loss_binary_maps: 0.1287, , lr:6.66667e-05, time:14.31
+2023-02-17 14:26:13,793 DBNet.pytorch INFO: [2/200], [34/46], global_step: 80, speed: 24.1 samples/sec, acc: 0.9553, iou_shrink_map: 0.8817, loss: 0.7079, loss_shrink_maps: 0.1702, loss_threshold_maps: 0.0399, loss_binary_maps: 0.1386, , lr:7.14976e-05, time:13.29
+2023-02-17 14:26:24,235 DBNet.pytorch INFO: [2/200], [44/46], global_step: 90, speed: 30.6 samples/sec, acc: 0.9537, iou_shrink_map: 0.8812, loss: 0.6492, loss_shrink_maps: 0.1410, loss_threshold_maps: 0.0388, loss_binary_maps: 0.1197, , lr:7.63285e-05, time:10.44
+2023-02-17 14:26:26,590 DBNet.pytorch INFO: [2/200], train_loss: 0.6750, time: 112.1223, lr: 7.729468599033817e-05
+2023-02-17 14:27:59,343 DBNet.pytorch INFO: FPS:7.345431402180005
+2023-02-17 14:27:59,359 DBNet.pytorch INFO: test: recall: 0.755533, precision: 0.744680, f1: 0.750067
+2023-02-17 14:27:59,359 DBNet.pytorch INFO: current best, recall: 0.755533, precision: 0.744680, hmean: 0.750067, train_loss: 0.674965, best_model_epoch: 2.000000,
+2023-02-17 14:27:59,484 DBNet.pytorch INFO: Saving current best: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint/model_best.pth
+2023-02-17 14:29:02,187 DBNet.pytorch INFO: [3/200], [8/46], global_step: 100, speed: 5.1 samples/sec, acc: 0.9563, iou_shrink_map: 0.8810, loss: 0.5734, loss_shrink_maps: 0.1140, loss_threshold_maps: 0.0363, loss_binary_maps: 0.0969, , lr:8.11594e-05, time:62.70
+2023-02-17 14:29:17,312 DBNet.pytorch INFO: [3/200], [18/46], global_step: 110, speed: 21.2 samples/sec, acc: 0.9534, iou_shrink_map: 0.8796, loss: 0.7193, loss_shrink_maps: 0.1628, loss_threshold_maps: 0.0420, loss_binary_maps: 0.1365, , lr:8.59903e-05, time:15.12
+2023-02-17 14:29:31,307 DBNet.pytorch INFO: [3/200], [28/46], global_step: 120, speed: 22.9 samples/sec, acc: 0.9542, iou_shrink_map: 0.8796, loss: 0.6087, loss_shrink_maps: 0.1351, loss_threshold_maps: 0.0358, loss_binary_maps: 0.1161, , lr:9.08213e-05, time:13.99
+2023-02-17 14:29:43,199 DBNet.pytorch INFO: [3/200], [38/46], global_step: 130, speed: 26.9 samples/sec, acc: 0.9543, iou_shrink_map: 0.8801, loss: 0.6552, loss_shrink_maps: 0.1458, loss_threshold_maps: 0.0386, loss_binary_maps: 0.1236, , lr:9.56522e-05, time:11.89
+2023-02-17 14:29:51,669 DBNet.pytorch INFO: [3/200], train_loss: 0.6691, time: 112.1851, lr: 9.951690821256039e-05
+2023-02-17 14:31:26,352 DBNet.pytorch INFO: FPS:7.337601979855435
+2023-02-17 14:31:26,368 DBNet.pytorch INFO: test: recall: 0.765936, precision: 0.738328, f1: 0.751879
+2023-02-17 14:31:26,368 DBNet.pytorch INFO: current best, recall: 0.765936, precision: 0.738328, hmean: 0.751879, train_loss: 0.669052, best_model_epoch: 3.000000,
+2023-02-17 14:31:26,493 DBNet.pytorch INFO: Saving current best: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint/model_best.pth
+2023-02-17 14:32:22,179 DBNet.pytorch INFO: [4/200], [2/46], global_step: 140, speed: 5.7 samples/sec, acc: 0.9515, iou_shrink_map: 0.8800, loss: 0.6942, loss_shrink_maps: 0.1533, loss_threshold_maps: 0.0413, loss_binary_maps: 0.1280, , lr:9.99901e-05, time:55.69
+2023-02-17 14:32:37,380 DBNet.pytorch INFO: [4/200], [12/46], global_step: 150, speed: 21.1 samples/sec, acc: 0.9517, iou_shrink_map: 0.8778, loss: 0.6868, loss_shrink_maps: 0.1652, loss_threshold_maps: 0.0387, loss_binary_maps: 0.1345, , lr:9.98907e-05, time:15.20
+2023-02-17 14:32:51,503 DBNet.pytorch INFO: [4/200], [22/46], global_step: 160, speed: 22.7 samples/sec, acc: 0.9501, iou_shrink_map: 0.8760, loss: 0.7016, loss_shrink_maps: 0.1754, loss_threshold_maps: 0.0366, loss_binary_maps: 0.1597, , lr:9.97914e-05, time:14.12
+2023-02-17 14:33:05,324 DBNet.pytorch INFO: [4/200], [32/46], global_step: 170, speed: 23.2 samples/sec, acc: 0.9520, iou_shrink_map: 0.8779, loss: 0.7256, loss_shrink_maps: 0.1632, loss_threshold_maps: 0.0424, loss_binary_maps: 0.1382, , lr:9.96921e-05, time:13.82
+2023-02-17 14:33:15,998 DBNet.pytorch INFO: [4/200], [42/46], global_step: 180, speed: 30.0 samples/sec, acc: 0.9523, iou_shrink_map: 0.8771, loss: 0.6758, loss_shrink_maps: 0.1578, loss_threshold_maps: 0.0390, loss_binary_maps: 0.1282, , lr:9.95927e-05, time:10.67
+2023-02-17 14:33:20,464 DBNet.pytorch INFO: [4/200], train_loss: 0.6917, time: 113.9713, lr: 9.955296762210923e-05
+2023-02-17 14:34:54,522 DBNet.pytorch INFO: FPS:7.215739681365204
+2023-02-17 14:34:54,535 DBNet.pytorch INFO: test: recall: 0.757741, precision: 0.731225, f1: 0.744247
+2023-02-17 14:34:54,535 DBNet.pytorch INFO: current best, recall: 0.765936, precision: 0.738328, hmean: 0.751879, train_loss: 0.669052, best_model_epoch: 3.000000,
+2023-02-17 14:34:54,535 DBNet.pytorch INFO: Saving checkpoint: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint/model_latest.pth
+2023-02-17 14:35:54,926 DBNet.pytorch INFO: [5/200], [6/46], global_step: 190, speed: 5.3 samples/sec, acc: 0.9560, iou_shrink_map: 0.8800, loss: 0.7845, loss_shrink_maps: 0.1793, loss_threshold_maps: 0.0453, loss_binary_maps: 0.1523, , lr:9.94933e-05, time:60.39
+2023-02-17 14:36:09,967 DBNet.pytorch INFO: [5/200], [16/46], global_step: 200, speed: 21.3 samples/sec, acc: 0.9509, iou_shrink_map: 0.8803, loss: 0.6474, loss_shrink_maps: 0.1451, loss_threshold_maps: 0.0383, loss_binary_maps: 0.1191, , lr:9.9394e-05, time:15.04
+2023-02-17 14:36:24,036 DBNet.pytorch INFO: [5/200], [26/46], global_step: 210, speed: 22.7 samples/sec, acc: 0.9523, iou_shrink_map: 0.8795, loss: 0.7241, loss_shrink_maps: 0.1622, loss_threshold_maps: 0.0424, loss_binary_maps: 0.1379, , lr:9.92946e-05, time:14.07
+2023-02-17 14:36:36,761 DBNet.pytorch INFO: [5/200], [36/46], global_step: 220, speed: 25.1 samples/sec, acc: 0.9530, iou_shrink_map: 0.8792, loss: 0.7174, loss_shrink_maps: 0.1548, loss_threshold_maps: 0.0433, loss_binary_maps: 0.1300, , lr:9.91952e-05, time:12.72
+2023-02-17 14:36:46,836 DBNet.pytorch INFO: [5/200], [46/46], global_step: 230, speed: 22.8 samples/sec, acc: 0.9527, iou_shrink_map: 0.8791, loss: 0.7423, loss_shrink_maps: 0.1749, loss_threshold_maps: 0.0422, loss_binary_maps: 0.1458, , lr:9.90958e-05, time:10.07
+2023-02-17 14:36:47,414 DBNet.pytorch INFO: [5/200], train_loss: 0.6837, time: 112.8778, lr: 9.909577053705353e-05
+
+*********************************************************************************************
+
+(dbnet_wenmu) C:\Application\Develop\DBNet_pytorch_Wenmu>python ./tools/train.py --config_file "config/icdar2015_resnet18_FPN_DBhead_polyLR.yaml"
+load from imagenet
+2023-02-17 14:01:56,446 DBNet.pytorch INFO: {'arch': {'backbone': {'in_channels': 3,
+                       'pretrained': True,
+                       'type': 'resnet18'},
+          'head': {'k': 50, 'out_channels': 2, 'type': 'DBHead'},
+          'neck': {'inner_channels': 256, 'type': 'FPN'},
+          'type': 'Model'},
+ 'dataset': {'train': {'dataset': {'args': {'data_path': ['./datasets/train.txt'],
+                                            'filter_keys': ['img_path',
+                                                            'img_name',
+                                                            'text_polys',
+                                                            'texts',
+                                                            'ignore_tags',
+                                                            'shape'],
+                                            'ignore_tags': ['*', '###'],
+                                            'img_mode': 'RGB',
+                                            'pre_processes': [{'args': [{'args': {'p': 0.5},
+                                                                         'type': 'Fliplr'},
+                                                                        {'args': {'rotate': [-5,
+                                                                                             5]},
+                                                                         'type': 'Affine'},
+                                                                        {'args': {'size': [0.5,
+                                                                                           3]},
+                                                                         'type': 'Resize'}],
+                                                               'type': 'IaaAugment'},
+                                                              {'args': {'keep_ratio': True,
+                                                                        'max_tries': 50,
+                                                                        'size': [640,
+                                                                                 640]},
+                                                               'type': 'EastRandomCropData'},
+                                                              {'args': {'shrink_ratio': 0.4,
+                                                                        'thresh_max': 0.7,
+                                                                        'thresh_min': 0.3},
+                                                               'type': 'MakeBorderMap'},
+                                                              {'args': {'min_text_size': 6,
+                                                                        'shrink_ratio': 0.4},
+                                                               'type': 'MakeShrinkMap'}],
+                                            'transforms': [{'args': {},
+                                                            'type': 'ToTensor'},
+                                                           {'args': {'mean': [0.485,
+                                                                              0.456,
+                                                                              0.406],
+                                                                     'std': [0.229,
+                                                                             0.224,
+                                                                             0.225]},
+                                                            'type': 'Normalize'}]},
+                                   'type': 'ICDAR2015Dataset'},
+                       'loader': {'batch_size': 32,
+                                  'collate_fn': '',
+                                  'num_workers': 8,
+                                  'pin_memory': True,
+                                  'shuffle': True}},
+             'validate': {'dataset': {'args': {'data_path': ['./datasets/test.txt'],
+                                               'filter_keys': [],
+                                               'ignore_tags': ['*', '###'],
+                                               'img_mode': 'RGB',
+                                               'pre_processes': [{'args': {'resize_text_polys': False,
+                                                                           'short_size': 736},
+                                                                  'type': 'ResizeShortSize'}],
+                                               'transforms': [{'args': {},
+                                                               'type': 'ToTensor'},
+                                                              {'args': {'mean': [0.485,
+                                                                                 0.456,
+                                                                                 0.406],
+                                                                        'std': [0.229,
+                                                                                0.224,
+                                                                                0.225]},
+                                                               'type': 'Normalize'}]},
+                                      'type': 'ICDAR2015Dataset'},
+                          'loader': {'batch_size': 8,
+                                     'collate_fn': 'ICDARCollectFN',
+                                     'num_workers': 4,
+                                     'pin_memory': False,
+                                     'shuffle': True}}},
+ 'distributed': False,
+ 'local_rank': 0,
+ 'loss': {'alpha': 1, 'beta': 10, 'ohem_ratio': 3, 'type': 'DBLoss'},
+ 'lr_scheduler': {'args': {'warmup_epoch': 3}, 'type': 'WarmupPolyLR'},
+ 'metric': {'args': {'is_output_polygon': False}, 'type': 'QuadMetric'},
+ 'name': 'DBNet_resnet18_FPN_DBHead',
+ 'optimizer': {'args': {'amsgrad': True, 'lr': 0.0001, 'weight_decay': 0},
+               'type': 'Adam'},
+ 'post_processing': {'args': {'box_thresh': 0.7,
+                              'max_candidates': 1000,
+                              'thresh': 0.3,
+                              'unclip_ratio': 1.5},
+                     'type': 'SegDetectorRepresenter'},
+ 'trainer': {'epochs': 200,
+             'finetune_checkpoint': 'C:\\Application\\Develop\\DBNet_pytorch_Wenmu\\output\\DBNet_resnet18_FPN_DBHead\\checkpoint\\model_best.pth',
+             'log_iter': 10,
+             'output_dir': 'C:\\Application\\Develop\\DBNet_pytorch_Wenmu\\output',
+             'resume_checkpoint': '',
+             'seed': 2,
+             'show_images_iter': 500,
+             'tensorboard': False}}
+2023-02-17 14:01:56,461 DBNet.pytorch INFO: train with device cuda and pytorch 1.13.0
+2023-02-17 14:01:56,461 DBNet.pytorch INFO: Loading checkpoint: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best.pth ...
+2023-02-17 14:01:56,602 DBNet.pytorch INFO: finetune from checkpoint C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best.pth
+2023-02-17 14:01:56,805 DBNet.pytorch INFO: train dataset has 1463 samples,46 in dataloader, validate dataset has 252 samples,32 in dataloader
+2023-02-17 14:03:12,987 DBNet.pytorch INFO: [1/200], [10/46], global_step: 10, speed: 4.2 samples/sec, acc: 0.9490, iou_shrink_map: 0.8750, loss: 0.5804, loss_shrink_maps: 0.1367, loss_threshold_maps: 0.0330, loss_binary_maps: 0.1139, , lr:3.76812e-05, time:76.18
+2023-02-17 14:03:26,418 DBNet.pytorch INFO: [1/200], [20/46], global_step: 20, speed: 23.8 samples/sec, acc: 0.9505, iou_shrink_map: 0.8762, loss: 0.5754, loss_shrink_maps: 0.1335, loss_threshold_maps: 0.0328, loss_binary_maps: 0.1140, , lr:4.25121e-05, time:13.43
+2023-02-17 14:03:40,105 DBNet.pytorch INFO: [1/200], [30/46], global_step: 30, speed: 23.4 samples/sec, acc: 0.9529, iou_shrink_map: 0.8797, loss: 0.5837, loss_shrink_maps: 0.1274, loss_threshold_maps: 0.0347, loss_binary_maps: 0.1089, , lr:4.7343e-05, time:13.69
+2023-02-17 14:03:50,955 DBNet.pytorch INFO: [1/200], [40/46], global_step: 40, speed: 29.5 samples/sec, acc: 0.9531, iou_shrink_map: 0.8793, loss: 0.6804, loss_shrink_maps: 0.1640, loss_threshold_maps: 0.0385, loss_binary_maps: 0.1319, , lr:5.21739e-05, time:10.85
+2023-02-17 14:03:59,656 DBNet.pytorch INFO: [1/200], train_loss: 0.6762, time: 122.8507, lr: 5.507246376811594e-05
+C:\Application\Develop\DBNet_pytorch_Wenmu\utils\ocr_metric\icdar2015\quad_metric.py:45: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify 'dtype=object' when creating the ndarray.
+  pred_polygons_batch = np.array(output[0])
+C:\Application\Develop\DBNet_pytorch_Wenmu\utils\ocr_metric\icdar2015\quad_metric.py:46: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify 'dtype=object' when creating the ndarray.
+  pred_scores_batch = np.array(output[1])
+2023-02-17 14:05:51,261 DBNet.pytorch INFO: FPS:5.967319246021299
+2023-02-17 14:05:51,277 DBNet.pytorch INFO: test: recall: 0.767947, precision: 0.741706, f1: 0.754599
+2023-02-17 14:05:51,277 DBNet.pytorch INFO: current best, recall: 0.767947, precision: 0.741706, hmean: 0.754599, train_loss: 0.676182, best_model_epoch: 1.000000,
+2023-02-17 14:05:51,402 DBNet.pytorch INFO: Saving current best: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint/model_best.pth
+2023-02-17 14:06:48,775 DBNet.pytorch INFO: [2/200], [4/46], global_step: 50, speed: 5.6 samples/sec, acc: 0.9532, iou_shrink_map: 0.8727, loss: 0.7019, loss_shrink_maps: 0.1639, loss_threshold_maps: 0.0400, loss_binary_maps: 0.1381, , lr:5.70048e-05, time:57.37
+2023-02-17 14:07:03,533 DBNet.pytorch INFO: [2/200], [14/46], global_step: 60, speed: 21.7 samples/sec, acc: 0.9542, iou_shrink_map: 0.8803, loss: 0.6435, loss_shrink_maps: 0.1396, loss_threshold_maps: 0.0386, loss_binary_maps: 0.1181, , lr:6.18357e-05, time:14.76
+2023-02-17 14:07:17,611 DBNet.pytorch INFO: [2/200], [24/46], global_step: 70, speed: 22.7 samples/sec, acc: 0.9544, iou_shrink_map: 0.8808, loss: 0.6481, loss_shrink_maps: 0.1428, loss_threshold_maps: 0.0387, loss_binary_maps: 0.1185, , lr:6.66667e-05, time:14.08
+2023-02-17 14:07:30,378 DBNet.pytorch INFO: [2/200], [34/46], global_step: 80, speed: 25.1 samples/sec, acc: 0.9556, iou_shrink_map: 0.8816, loss: 0.6226, loss_shrink_maps: 0.1410, loss_threshold_maps: 0.0364, loss_binary_maps: 0.1175, , lr:7.14976e-05, time:12.77
+2023-02-17 14:07:40,694 DBNet.pytorch INFO: [2/200], [44/46], global_step: 90, speed: 31.0 samples/sec, acc: 0.9552, iou_shrink_map: 0.8828, loss: 0.6338, loss_shrink_maps: 0.1398, loss_threshold_maps: 0.0378, loss_binary_maps: 0.1164, , lr:7.63285e-05, time:10.32
+2023-02-17 14:07:43,089 DBNet.pytorch INFO: [2/200], train_loss: 0.6671, time: 111.6866, lr: 7.729468599033817e-05
+2023-02-17 14:09:27,800 DBNet.pytorch INFO: FPS:7.184113684025249
+2023-02-17 14:09:27,816 DBNet.pytorch INFO: test: recall: 0.757545, precision: 0.735388, f1: 0.746302
+2023-02-17 14:09:27,816 DBNet.pytorch INFO: current best, recall: 0.767947, precision: 0.741706, hmean: 0.754599, train_loss: 0.676182, best_model_epoch: 1.000000,
+2023-02-17 14:09:27,816 DBNet.pytorch INFO: Saving checkpoint: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint/model_latest.pth
+2023-02-17 14:10:33,036 DBNet.pytorch INFO: [3/200], [8/46], global_step: 100, speed: 4.9 samples/sec, acc: 0.9570, iou_shrink_map: 0.8817, loss: 0.6020, loss_shrink_maps: 0.1285, loss_threshold_maps: 0.0366, loss_binary_maps: 0.1079, , lr:8.11594e-05, time:65.22
+2023-02-17 14:10:47,601 DBNet.pytorch INFO: [3/200], [18/46], global_step: 110, speed: 22.0 samples/sec, acc: 0.9537, iou_shrink_map: 0.8792, loss: 0.7906, loss_shrink_maps: 0.1757, loss_threshold_maps: 0.0464, loss_binary_maps: 0.1511, , lr:8.59903e-05, time:14.56
+2023-02-17 14:11:01,293 DBNet.pytorch INFO: [3/200], [28/46], global_step: 120, speed: 23.4 samples/sec, acc: 0.9544, iou_shrink_map: 0.8798, loss: 0.6712, loss_shrink_maps: 0.1575, loss_threshold_maps: 0.0386, loss_binary_maps: 0.1275, , lr:9.08213e-05, time:13.68
+
+***************************************************************************************************************************************************************
+(dbnet_wenmu) C:\Application\Develop\DBNet_pytorch_Wenmu>python ./tools/train.py --config_file "config/icdar2015_resnet18_FPN_DBhead_polyLR.yaml"
+load from imagenet
+2023-02-17 14:12:45,287 DBNet.pytorch INFO: {'arch': {'backbone': {'in_channels': 3,
+                       'pretrained': True,
+                       'type': 'resnet18'},
+          'head': {'k': 50, 'out_channels': 2, 'type': 'DBHead'},
+          'neck': {'inner_channels': 256, 'type': 'FPN'},
+          'type': 'Model'},
+ 'dataset': {'train': {'dataset': {'args': {'data_path': ['./datasets/train.txt'],
+                                            'filter_keys': ['img_path',
+                                                            'img_name',
+                                                            'text_polys',
+                                                            'texts',
+                                                            'ignore_tags',
+                                                            'shape'],
+                                            'ignore_tags': ['*', '###'],
+                                            'img_mode': 'RGB',
+                                            'pre_processes': [{'args': [{'args': {'p': 0.5},
+                                                                         'type': 'Fliplr'},
+                                                                        {'args': {'rotate': [-5,
+                                                                                             5]},
+                                                                         'type': 'Affine'},
+                                                                        {'args': {'size': [0.5,
+                                                                                           3]},
+                                                                         'type': 'Resize'}],
+                                                               'type': 'IaaAugment'},
+                                                              {'args': {'keep_ratio': True,
+                                                                        'max_tries': 50,
+                                                                        'size': [640,
+                                                                                 640]},
+                                                               'type': 'EastRandomCropData'},
+                                                              {'args': {'shrink_ratio': 0.4,
+                                                                        'thresh_max': 0.7,
+                                                                        'thresh_min': 0.3},
+                                                               'type': 'MakeBorderMap'},
+                                                              {'args': {'min_text_size': 6,
+                                                                        'shrink_ratio': 0.4},
+                                                               'type': 'MakeShrinkMap'}],
+                                            'transforms': [{'args': {},
+                                                            'type': 'ToTensor'},
+                                                           {'args': {'mean': [0.485,
+                                                                              0.456,
+                                                                              0.406],
+                                                                     'std': [0.229,
+                                                                             0.224,
+                                                                             0.225]},
+                                                            'type': 'Normalize'}]},
+                                   'type': 'ICDAR2015Dataset'},
+                       'loader': {'batch_size': 32,
+                                  'collate_fn': '',
+                                  'num_workers': 20,
+                                  'pin_memory': True,
+                                  'shuffle': True}},
+             'validate': {'dataset': {'args': {'data_path': ['./datasets/test.txt'],
+                                               'filter_keys': [],
+                                               'ignore_tags': ['*', '###'],
+                                               'img_mode': 'RGB',
+                                               'pre_processes': [{'args': {'resize_text_polys': False,
+                                                                           'short_size': 736},
+                                                                  'type': 'ResizeShortSize'}],
+                                               'transforms': [{'args': {},
+                                                               'type': 'ToTensor'},
+                                                              {'args': {'mean': [0.485,
+                                                                                 0.456,
+                                                                                 0.406],
+                                                                        'std': [0.229,
+                                                                                0.224,
+                                                                                0.225]},
+                                                               'type': 'Normalize'}]},
+                                      'type': 'ICDAR2015Dataset'},
+                          'loader': {'batch_size': 8,
+                                     'collate_fn': 'ICDARCollectFN',
+                                     'num_workers': 20,
+                                     'pin_memory': True,
+                                     'shuffle': True}}},
+ 'distributed': False,
+ 'local_rank': 0,
+ 'loss': {'alpha': 1, 'beta': 10, 'ohem_ratio': 3, 'type': 'DBLoss'},
+ 'lr_scheduler': {'args': {'warmup_epoch': 3}, 'type': 'WarmupPolyLR'},
+ 'metric': {'args': {'is_output_polygon': False}, 'type': 'QuadMetric'},
+ 'name': 'DBNet_resnet18_FPN_DBHead',
+ 'optimizer': {'args': {'amsgrad': True, 'lr': 0.0001, 'weight_decay': 0},
+               'type': 'Adam'},
+ 'post_processing': {'args': {'box_thresh': 0.7,
+                              'max_candidates': 1000,
+                              'thresh': 0.3,
+                              'unclip_ratio': 1.5},
+                     'type': 'SegDetectorRepresenter'},
+ 'trainer': {'epochs': 200,
+             'finetune_checkpoint': 'C:\\Application\\Develop\\DBNet_pytorch_Wenmu\\output\\DBNet_resnet18_FPN_DBHead\\checkpoint\\model_best.pth',
+             'log_iter': 10,
+             'output_dir': 'C:\\Application\\Develop\\DBNet_pytorch_Wenmu\\output',
+             'resume_checkpoint': '',
+             'seed': 2,
+             'show_images_iter': 500,
+             'tensorboard': False}}
+2023-02-17 14:12:45,302 DBNet.pytorch INFO: train with device cuda and pytorch 1.13.0
+2023-02-17 14:12:45,302 DBNet.pytorch INFO: Loading checkpoint: C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best.pth ...
+2023-02-17 14:12:45,427 DBNet.pytorch INFO: finetune from checkpoint C:\Application\Develop\DBNet_pytorch_Wenmu\output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best.pth
+2023-02-17 14:12:45,599 DBNet.pytorch INFO: train dataset has 1463 samples,46 in dataloader, validate dataset has 252 samples,32 in dataloader
+error of memory
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+
+
+
+
