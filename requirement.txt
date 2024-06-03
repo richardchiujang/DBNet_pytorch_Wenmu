@@ -2,7 +2,7 @@ anyconfig
 future
 imgaug
 matplotlib
-numpy==1.20
+numpy
 opencv-python
 Polygon
 pyclipper

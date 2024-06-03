@@ -31,7 +31,7 @@ loss:
 optimizer:
   type: Adam
   args:
-    lr: 0.0015
+    lr: 0.0007
     weight_decay: 0
     amsgrad: true
 lr_scheduler:
@@ -40,13 +40,13 @@ lr_scheduler:
     warmup_epoch: 0
 trainer:
   seed: 2
-  epochs: 50
+  epochs: 100
   log_iter: 10
-  show_images_iter: 500
+  show_images_iter: 100
   resume_checkpoint: ''  # 'output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best.pth'
-  finetune_checkpoint: 'output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best_current best, recall 0.941087, precision 0.968583, hmean 0.954637, train_loss 0.727707, best_model_epoch 66_mix.pth'  # 'output\DBNet_resnet18_FPN_DBHead\checkpoint\model_latest.pth'
+  finetune_checkpoint: 'output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best.pth'  # 'output\DBNet_resnet18_FPN_DBHead\checkpoint\model_latest.pth'
   output_dir: output
-  tensorboard: true
+  tensorboard: false
 dataset:
   train:
     dataset:
@@ -55,10 +55,10 @@ dataset:
           - ./datasets/train.txt
         img_mode: RGB
     loader:
-      batch_size: 12
+      batch_size: 8
       shuffle: true
-      pin_memory: true
-      num_workers: 2
+      pin_memory: false
+      num_workers: 0
       collate_fn: ''
   validate:
     dataset:
@@ -72,8 +72,8 @@ dataset:
               resize_text_polys: false
         img_mode: RGB
     loader:
-      batch_size: 12
+      batch_size: 1
       shuffle: true
-      pin_memory: true
-      num_workers: 2
+      pin_memory: false
+      num_workers: 8
       collate_fn: ICDARCollectFN

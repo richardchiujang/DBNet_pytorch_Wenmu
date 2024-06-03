@@ -8,7 +8,8 @@ from __future__ import print_function
 import argparse
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+os.environ['CUDA_VISIBLE_DEVICES'] = str('0')  ###
 # os.environ['MASTER_ADDR'] = "localhost"
 # os.environ['MASTER_PORT'] = "23456"
 # os.environ['RANK'] = '0'
@@ -16,7 +17,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 # os.environ['LOCAL_RANK'] = '0'
 # os.environ['local_rank'] = '0'
 # torch.distributed.init_process_group(backend="gloo")
-# os.environ["PL_TORCH_DISTRIBUTED_BACKEND"] = "gloo"
+# os.environ["PL_TORCH_DISTRIBUTED_BACKEND"] = "gloo" 
 
 import anyconfig
 
