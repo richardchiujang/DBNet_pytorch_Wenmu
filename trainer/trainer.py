@@ -182,6 +182,7 @@ class Trainer(BaseTrainer):
             if save_best:
                 import shutil
                 shutil.copy(net_save_path, net_save_path_best)
+                shutil.copy(net_save_path, '{}/model_best_e{}_h{}_l{}.pth'.format(self.checkpoint_dir, self.epoch_result['epoch'], self.metrics['hmean'], self.metrics['train_loss']))
                 self.logger_info("Saving current best: {}".format(net_save_path_best))
             else:
                 self.logger_info("Saving checkpoint: {}".format(net_save_path))
