@@ -43,7 +43,7 @@ trainer:
   epochs: 100
   log_iter: 10
   show_images_iter: 100
-  resume_checkpoint: 'output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best.pth'  # 'output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best.pth'
+  resume_checkpoint: 'output\DBNet_resnet18_FPN_DBHead\checkpoint\model_latest.pth'  # 'output\DBNet_resnet18_FPN_DBHead\checkpoint\model_best.pth'
   finetune_checkpoint: ''  # 'output\DBNet_resnet18_FPN_DBHead\checkpoint\model_latest.pth'
   output_dir: output
   tensorboard: false
@@ -55,10 +55,10 @@ dataset:
           - ./datasets/train.txt
         img_mode: RGB
     loader:
-      batch_size: 16
+      batch_size: 32
       shuffle: true
       pin_memory: true
-      num_workers: 0
+      num_workers: 4
       collate_fn: ''
   validate:
     dataset:
@@ -68,12 +68,12 @@ dataset:
         pre_processes:
           - type: ResizeShortSize
             args:
-              short_size: 1024
+              short_size: 826
               resize_text_polys: False
         img_mode: RGB
     loader:
-      batch_size: 1
+      batch_size: 16
       shuffle: true
       pin_memory: false
-      num_workers: 32
-      collate_fn: ICDARCollectFN
+      num_workers: 8
+      collate_fn: 'ICDARCollectFN' # ICDARCollectFN

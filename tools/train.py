@@ -51,7 +51,7 @@ def main(config):
     train_loader = get_dataloader(config['dataset']['train'], config['distributed'])
     assert train_loader is not None
     if 'validate' in config['dataset']:
-        validate_loader = get_dataloader(config['dataset']['validate'], False)
+        validate_loader = get_dataloader(config['dataset']['validate'], distributed=False)
     else:
         validate_loader = None
 
