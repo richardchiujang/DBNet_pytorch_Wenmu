@@ -10,6 +10,7 @@
 __pycache__/
 .idea/
 output/
+weights/
 test/*.jpg
 input/
 input*/
