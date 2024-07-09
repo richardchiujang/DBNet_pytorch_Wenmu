@@ -9,7 +9,7 @@ import argparse
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 # os.environ['CUDA_VISIBLE_DEVICES'] = '0'
-os.environ['CUDA_VISIBLE_DEVICES'] = str('0')  ###
+os.environ['CUDA_VISIBLE_DEVICES'] = str('1')  ###
 # os.environ['MASTER_ADDR'] = "localhost"
 # os.environ['MASTER_PORT'] = "23456"
 # os.environ['RANK'] = '0'
